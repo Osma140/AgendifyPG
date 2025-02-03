@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Temporizadores - Agenda Virtual</title>
+    <link rel="icon" href="icon/icon.ico" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="main-title"><i class="fas fa-clock"></i> Temporizadores</h1>
+        
+        <div class="content">
+            <div id="timers-grid" class="timers-grid">
+                <!-- Los temporizadores se cargarán aquí dinámicamente -->
+            </div>
+        </div>
+    </div>
+
+    <nav class="bottom-nav" id="bottomNav">
+        <a href="index.html" class="nav-item" data-section="inicio">
+            <i class="fas fa-plus"></i>
+            <span>Crear</span>
+        </a>
+        <a href="temporizadores.html" class="nav-item active" data-section="temporizadores">
+            <i class="fas fa-clock"></i>
+            <span>Ver Temporizadores</span>
+        </a>
+    </nav>
+
+    <button id="theme-toggle" class="theme-toggle">
+        <i class="fas fa-sun"></i>
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
