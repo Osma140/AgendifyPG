@@ -3,8 +3,20 @@ document.addEventListener("DOMContentLoaded", () => {
   const timersContainer = document.querySelector(".timers-grid")
   const themeToggle = document.getElementById("theme-toggle")
 
+  // Solicitar permiso para notificaciones
+  if ("Notification" in window) {
+    Notification.requestPermission()
+  }
+
+  // Registrar el Service Worker
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("service-worker.js").then(() => {
+      console.log("Service Worker registrado")
+    })
+  }
+
   function loadTimersFromStorage() {
-    if (!timersContainer) return // Si no estamos en la página de temporizadores, no hacemos nada
+    if (!timersContainer) return
     const timers = JSON.parse(localStorage.getItem("timers")) || []
     timersContainer.innerHTML = ""
     timers.forEach((timer) => createTimerCard(timer))
@@ -15,7 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function createTimerCard(timer) {
-    if (!timersContainer) return // Si no estamos en la página de temporizadores, no hacemos nada
+    if (!timersContainer) return
     const timerCard = document.createElement("div")
     timerCard.classList.add("timer-card")
     timerCard.setAttribute("data-id", timer.id)
@@ -29,35 +41,39 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     timerCard.innerHTML = `
-        <h3><i class="fas fa-hourglass-start"></i> ${timer.NombreEvento}</h3>
-        <div class="timer-display">
-          <div class="timer-unit">
-            <span class="days">00</span>
-            <small>Días</small>
-          </div>
-          <div class="timer-unit">
-            <span class="hours">00</span>
-            <small>Horas</small>
-          </div>
-          <div class="timer-unit">
-            <span class="minutes">00</span>
-            <small>Minutos</small>
-          </div>
-          <div class="timer-unit">
-            <span class="seconds">00</span>
-            <small>Segundos</small>
-          </div>
+      <h3><i class="fas fa-hourglass-start"></i> ${timer.NombreEvento}</h3>
+      <div class="timer-display">
+        <div class="timer-unit">
+          <span class="days">00</span>
+          <small>Días</small>
         </div>
-        <div class="timer-actions">
-          <button class="delete-button" data-id="${timer.id}"><i class="fas fa-trash"></i> Eliminar</button>
-          <button class="sound-button" data-sound="${timer.Sound}"><i class="fas fa-volume-up"></i> Probar Sonido</button>
+        <div class="timer-unit">
+          <span class="hours">00</span>
+          <small>Horas</small>
         </div>
-      `
+        <div class="timer-unit">
+          <span class="minutes">00</span>
+          <small>Minutos</small>
+        </div>
+        <div class="timer-unit">
+          <span class="seconds">00</span>
+          <small>Segundos</small>
+        </div>
+      </div>
+      <div class="timer-actions">
+        <button class="edit-button" data-id="${timer.id}"><i class="fas fa-edit"></i> Editar</button>
+        <button class="delete-button" data-id="${timer.id}"><i class="fas fa-trash"></i> Eliminar</button>
+        <button class="sound-button" data-sound="${timer.Sound}"><i class="fas fa-volume-up"></i> Probar Sonido</button>
+      </div>
+    `
 
     timersContainer.appendChild(timerCard)
 
     const deleteButton = timerCard.querySelector(".delete-button")
     deleteButton.addEventListener("click", () => deleteTimer(timer.id))
+
+    const editButton = timerCard.querySelector(".edit-button")
+    editButton.addEventListener("click", () => openEditModal(timer))
 
     const soundButton = timerCard.querySelector(".sound-button")
     soundButton.addEventListener("click", () => {
@@ -77,7 +93,9 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!timerCard.hasAttribute("data-finished")) {
         timerCard.setAttribute("data-finished", "true")
         const soundFile = timerCard.getAttribute("data-sound")
+        const timerName = timerCard.querySelector("h3").textContent
         playSound(soundFile)
+        showNotification(timerName)
       }
       timerCard.querySelector(".timer-display").innerHTML = "<p>Evento finalizado</p>"
       return
@@ -88,10 +106,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60))
     const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000)
 
-    timerCard.querySelector(".days").textContent = days.toString().padStart(2, "0")
-    timerCard.querySelector(".hours").textContent = hours.toString().padStart(2, "0")
-    timerCard.querySelector(".minutes").textContent = minutes.toString().padStart(2, "0")
-    timerCard.querySelector(".seconds").textContent = seconds.toString().padStart(2, "0")
+    const updateElement = (selector, value) => {
+      const element = timerCard.querySelector(selector)
+      if (element.textContent !== value) {
+        element.textContent = value
+      }
+    }
+
+    updateElement(".days", days.toString().padStart(2, "0"))
+    updateElement(".hours", hours.toString().padStart(2, "0"))
+    updateElement(".minutes", minutes.toString().padStart(2, "0"))
+    updateElement(".seconds", seconds.toString().padStart(2, "0"))
   }
 
   function deleteTimer(id) {
@@ -101,23 +126,13 @@ document.addEventListener("DOMContentLoaded", () => {
     loadTimersFromStorage()
   }
 
-  function showNotification(message, type) {
-    const notification = document.createElement("div")
-    notification.className = `notification ${type}`
-    notification.textContent = message
-
-    document.body.appendChild(notification)
-
-    setTimeout(() => {
-      notification.classList.add("show")
-    }, 10)
-
-    setTimeout(() => {
-      notification.classList.remove("show")
-      setTimeout(() => {
-        notification.remove()
-      }, 300)
-    }, 3000)
+  function showNotification(timerName) {
+    if ("Notification" in window && Notification.permission === "granted") {
+      new Notification("Temporizador finalizado", {
+        body: `El temporizador "${timerName}" ha terminado.`,
+        icon: "icon/icon.ico",
+      })
+    }
   }
 
   let currentAudio = null
@@ -128,23 +143,13 @@ document.addEventListener("DOMContentLoaded", () => {
       currentAudio.currentTime = 0
     }
 
-    console.log("Intentando reproducir:", soundFile)
-
     const audio = new Audio(soundFile)
     currentAudio = audio
 
-    audio
-      .play()
-      .then(() => {
-        console.log("Reproducción iniciada")
-      })
-      .catch((error) => {
-        console.error("Error al reproducir el sonido:", error)
-        showNotification(
-          "Error al reproducir el sonido. Por favor, verifica la configuración de tu navegador.",
-          "error",
-        )
-      })
+    audio.play().catch((error) => {
+      console.error("Error al reproducir el sonido:", error)
+      showNotification("Error al reproducir el sonido. Por favor, verifica la configuración de tu navegador.", "error")
+    })
   }
 
   if (form) {
@@ -164,7 +169,81 @@ document.addEventListener("DOMContentLoaded", () => {
 
       form.reset()
       showNotification("Temporizador creado exitosamente", "success")
+      scheduleNotification(newTimer)
     })
+  }
+
+  function scheduleNotification(timer) {
+    if ("serviceWorker" in navigator && "SyncManager" in window) {
+      navigator.serviceWorker.ready.then((registration) => {
+        registration.sync.register("schedule-notification").then(() => {
+          console.log("Notificación programada")
+        })
+      })
+    }
+  }
+
+  function openEditModal(timer) {
+    const modal = document.createElement("div")
+    modal.classList.add("modal")
+    modal.innerHTML = `
+      <div class="modal-content">
+        <h2>Editar Temporizador</h2>
+        <form id="edit-timer-form">
+          <input type="hidden" name="id" value="${timer.id}">
+          <div class="form-group">
+            <label for="edit-event-name">Nombre del Evento:</label>
+            <input type="text" id="edit-event-name" name="Name" value="${timer.NombreEvento}" required>
+          </div>
+          <div class="form-group">
+            <label for="edit-event-date">Fecha y Hora del Evento:</label>
+            <input type="datetime-local" id="edit-event-date" name="FechaHora" value="${timer.FechaHora.slice(0, 16)}" required>
+          </div>
+          <div class="form-group">
+            <label for="edit-event-sound">Sonido de Alarma:</label>
+            <select id="edit-event-sound" name="Sound" required>
+              <option value="sonido/sonido1.mp3" ${timer.Sound === "sonido/sonido1.mp3" ? "selected" : ""}>Alarma 1</option>
+              <option value="sonido/sonido2.mp3" ${timer.Sound === "sonido/sonido2.mp3" ? "selected" : ""}>Alarma 2</option>
+              <option value="sonido/sonido3.mp3" ${timer.Sound === "sonido/sonido3.mp3" ? "selected" : ""}>Alarma 3</option>
+            </select>
+          </div>
+          <div class="form-actions">
+            <button type="submit">Guardar Cambios</button>
+            <button type="button" id="cancel-edit">Cancelar</button>
+          </div>
+        </form>
+      </div>
+    `
+
+    document.body.appendChild(modal)
+
+    const editForm = document.getElementById("edit-timer-form")
+    const cancelButton = document.getElementById("cancel-edit")
+
+    editForm.addEventListener("submit", (e) => {
+      e.preventDefault()
+      const formData = new FormData(editForm)
+      const updatedTimer = {
+        id: Number(formData.get("id")),
+        NombreEvento: formData.get("Name"),
+        FechaHora: formData.get("FechaHora"),
+        Sound: formData.get("Sound"),
+      }
+
+      let timers = JSON.parse(localStorage.getItem("timers")) || []
+      timers = timers.map((t) => (t.id === updatedTimer.id ? updatedTimer : t))
+      saveTimersToStorage(timers)
+      loadTimersFromStorage()
+      closeModal(modal)
+      showNotification("Temporizador actualizado exitosamente", "success")
+      scheduleNotification(updatedTimer)
+    })
+
+    cancelButton.addEventListener("click", () => closeModal(modal))
+  }
+
+  function closeModal(modal) {
+    modal.remove()
   }
 
   loadTimersFromStorage()
@@ -217,4 +296,3 @@ document.addEventListener("DOMContentLoaded", () => {
     })
   }
 })
-
