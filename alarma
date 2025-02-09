@@ -1,0 +1,48 @@
+self.addEventListener("install", (event) => {
+  console.log("Service Worker instalado")
+})
+
+self.addEventListener("activate", (event) => {
+  console.log("Service Worker activado")
+})
+
+self.addEventListener("sync", (event) => {
+  if (event.tag === "schedule-notification") {
+    event.waitUntil(scheduleNotifications())
+  }
+})
+
+function scheduleNotifications() {
+  return new Promise((resolve) => {
+    const timers = JSON.parse(localStorage.getItem("timers")) || []
+    timers.forEach((timer) => {
+      const endTime = new Date(timer.FechaHora).getTime()
+      const now = Date.now()
+      const timeUntilEnd = endTime - now
+
+      if (timeUntilEnd > 0) {
+        setTimeout(() => {
+          self.registration.showNotification("Temporizador finalizado", {
+            body: `El temporizador "${timer.NombreEvento}" ha terminado.`,
+            icon: "icon/icon.ico",
+            vibrate: [200, 100, 200],
+            tag: timer.id,
+          })
+        }, timeUntilEnd)
+      }
+    })
+    resolve()
+  })
+}
+
+self.addEventListener("notificationclick", (event) => {
+  event.notification.close()
+  event.waitUntil(
+    clients.matchAll({ type: "window" }).then((clientList) => {
+      for (const client of clientList) {
+        if (client.url === "/" && "focus" in client) return client.focus()
+      }
+      if (clients.openWindow) return clients.openWindow("/")
+    }),
+  )
+})
