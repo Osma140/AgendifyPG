@@ -187,35 +187,42 @@ document.addEventListener("DOMContentLoaded", () => {
     const modal = document.createElement("div")
     modal.classList.add("modal")
     modal.innerHTML = `
-      <div class="modal-content">
-        <h2>Editar Temporizador</h2>
-        <form id="edit-timer-form">
-          <input type="hidden" name="id" value="${timer.id}">
-          <div class="form-group">
-            <label for="edit-event-name">Nombre del Evento:</label>
-            <input type="text" id="edit-event-name" name="Name" value="${timer.NombreEvento}" required>
-          </div>
-          <div class="form-group">
-            <label for="edit-event-date">Fecha y Hora del Evento:</label>
-            <input type="datetime-local" id="edit-event-date" name="FechaHora" value="${timer.FechaHora.slice(0, 16)}" required>
-          </div>
-          <div class="form-group">
-            <label for="edit-event-sound">Sonido de Alarma:</label>
-            <select id="edit-event-sound" name="Sound" required>
-              <option value="sonido/sonido1.mp3" ${timer.Sound === "sonido/sonido1.mp3" ? "selected" : ""}>Alarma 1</option>
-              <option value="sonido/sonido2.mp3" ${timer.Sound === "sonido/sonido2.mp3" ? "selected" : ""}>Alarma 2</option>
-              <option value="sonido/sonido3.mp3" ${timer.Sound === "sonido/sonido3.mp3" ? "selected" : ""}>Alarma 3</option>
-            </select>
-          </div>
-          <div class="form-actions">
-            <button type="submit">Guardar Cambios</button>
-            <button type="button" id="cancel-edit">Cancelar</button>
-          </div>
-        </form>
+      <div class="modal-overlay"></div>
+      <div class="modal-container">
+        <div class="modal-content">
+          <h2 class="modal-title">Editar Temporizador</h2>
+          <form id="edit-timer-form">
+            <input type="hidden" name="id" value="${timer.id}">
+            <div class="form-group">
+              <label for="edit-event-name">Nombre del Evento:</label>
+              <input type="text" id="edit-event-name" name="Name" value="${timer.NombreEvento}" required>
+            </div>
+            <div class="form-group">
+              <label for="edit-event-date">Fecha y Hora del Evento:</label>
+              <input type="datetime-local" id="edit-event-date" name="FechaHora" value="${timer.FechaHora.slice(0, 16)}" required>
+            </div>
+            <div class="form-group">
+              <label for="edit-event-sound">Sonido de Alarma:</label>
+              <select id="edit-event-sound" name="Sound" required>
+                <option value="sonido/sonido1.mp3" ${timer.Sound === "sonido/sonido1.mp3" ? "selected" : ""}>Alarma 1</option>
+                <option value="sonido/sonido2.mp3" ${timer.Sound === "sonido/sonido2.mp3" ? "selected" : ""}>Alarma 2</option>
+                <option value="sonido/sonido3.mp3" ${timer.Sound === "sonido/sonido3.mp3" ? "selected" : ""}>Alarma 3</option>
+              </select>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+              <button type="button" id="cancel-edit" class="btn btn-secondary">Cancelar</button>
+            </div>
+          </form>
+        </div>
       </div>
     `
 
     document.body.appendChild(modal)
+
+    setTimeout(() => {
+      modal.classList.add("show")
+    }, 10)
 
     const editForm = document.getElementById("edit-timer-form")
     const cancelButton = document.getElementById("cancel-edit")
@@ -240,10 +247,23 @@ document.addEventListener("DOMContentLoaded", () => {
     })
 
     cancelButton.addEventListener("click", () => closeModal(modal))
+
+    // Cerrar el modal al hacer clic fuera de él
+    modal.querySelector(".modal-overlay").addEventListener("click", () => closeModal(modal))
+
+    // Accesibilidad: cerrar el modal con la tecla Esc
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        closeModal(modal)
+      }
+    })
   }
 
   function closeModal(modal) {
-    modal.remove()
+    modal.classList.remove("show")
+    setTimeout(() => {
+      modal.remove()
+    }, 300)
   }
 
   loadTimersFromStorage()
