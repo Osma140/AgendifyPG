@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Tareas</title>
+    <link rel="icon" href="icon/icon.ico" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="main-title"><i class="fas fa-tasks"></i> Lista de Tareas</h1>
+        
+        <div class="content">
+            <div class="task-creator">
+                <h2>Agregar Nueva Tarea</h2>
+                <form id="create-task-form" class="task-form">
+                    <div class="form-group">
+                        <label for="task-name">Nombre de la Tarea:</label>
+                        <input type="text" id="task-name" name="TaskName" placeholder="Ingrese el nombre de la tarea" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="task-priority">Prioridad:</label>
+                        <select id="task-priority" name="TaskPriority" required>
+                            <option value="baja">Baja</option>
+                            <option value="media">Media</option>
+                            <option value="alta">Alta</option>
+                        </select>
+                    </div>
+                    <button type="submit"><i class="fas fa-plus"></i> Agregar Tarea</button>
+                </form>
+            </div>
+            <div id="tasks-list" class="tasks-list">
+                <!-- Las tareas se cargarán aquí dinámicamente -->
+            </div>
+        </div>
+    </div>
+
+    <nav class="bottom-nav" id="bottomNav">
+        <a href="index.html" class="nav-item" data-section="inicio">
+            <i class="fas fa-plus"></i>
+            <span>Crear</span>
+        </a>
+        <a href="temporizadores.html" class="nav-item" data-section="temporizadores">
+            <i class="fas fa-clock"></i>
+            <span>Ver Eventos</span>
+        </a>
+        <a href="tareas.html" class="nav-item active" data-section="tareas">
+            <i class="fas fa-tasks"></i>
+            <span>Tareas</span>
+        </a>
+    </nav>
+
+    <button id="theme-toggle" class="theme-toggle">
+        <i class="fas fa-sun"></i>
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <script src="script.js"></script>
+</body>
+</html>
