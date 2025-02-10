@@ -41,5 +41,32 @@
     </button>
 
     <script src="script.js"></script>
+
+    <div id="edit-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Editar Evento</h2>
+            <form id="edit-event-form">
+                <input type="hidden" id="edit-event-id">
+                <div class="form-group">
+                    <label for="edit-event-name">Nombre del Evento:</label>
+                    <input type="text" id="edit-event-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-event-date">Fecha y Hora del Evento:</label>
+                    <input type="datetime-local" id="edit-event-date" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-event-sound">Sonido de Alarma:</label>
+                    <select id="edit-event-sound" required>
+                        <option value="sonido/sonido1.mp3">Alarma 1</option>
+                        <option value="sonido/sonido2.mp3">Alarma 2</option>
+                        <option value="sonido/sonido3.mp3">Alarma 3</option>
+                    </select>
+                </div>
+                <button type="submit">Guardar Cambios</button>
+            </form>
+        </div>
+    </div>
 </body>
 </html>
