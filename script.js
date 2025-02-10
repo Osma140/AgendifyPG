@@ -51,6 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
         </div>
       </div>
       <div class="timer-actions">
+        <button class="edit-button" data-id="${timer.id}"><i class="fas fa-edit"></i> Editar</button>
         <button class="delete-button" data-id="${timer.id}"><i class="fas fa-trash"></i> Eliminar</button>
         <button class="sound-button" data-sound="${timer.Sound}"><i class="fas fa-volume-up"></i> Probar Sonido</button>
       </div>
@@ -66,6 +67,9 @@ document.addEventListener("DOMContentLoaded", () => {
       const soundFile = timer.Sound
       playSound(soundFile)
     })
+
+    const editButton = timerCard.querySelector(".edit-button")
+    editButton.addEventListener("click", () => openEditModal(timer.id))
 
     updateTimer(timerCard)
   }
@@ -284,6 +288,71 @@ document.addEventListener("DOMContentLoaded", () => {
         document.body.removeChild(link)
         showNotification("La descarga comenzará en breve. Gracias por tu interés en nuestra aplicación.", "success")
       }
+    })
+  }
+
+  function openEditModal(id) {
+    const modal = document.getElementById("edit-modal")
+    const closeBtn = modal.querySelector(".close")
+    const form = document.getElementById("edit-event-form")
+
+    const timers = JSON.parse(localStorage.getItem("timers")) || []
+    const timer = timers.find((t) => t.id === id)
+
+    if (timer) {
+      document.getElementById("edit-event-id").value = timer.id
+      document.getElementById("edit-event-name").value = timer.NombreEvento
+      document.getElementById("edit-event-date").value = timer.FechaHora
+      document.getElementById("edit-event-sound").value = timer.Sound
+    }
+
+    modal.style.display = "block"
+
+    closeBtn.onclick = () => {
+      modal.style.display = "none"
+    }
+
+    window.onclick = (event) => {
+      if (event.target === modal) {
+        modal.style.display = "none"
+      }
+    }
+
+    form.onsubmit = (e) => {
+      e.preventDefault()
+      saveEditedEvent()
+    }
+  }
+
+  function saveEditedEvent() {
+    const id = document.getElementById("edit-event-id").value
+    const name = document.getElementById("edit-event-name").value
+    const date = document.getElementById("edit-event-date").value
+    const sound = document.getElementById("edit-event-sound").value
+
+    const timers = JSON.parse(localStorage.getItem("timers")) || []
+    const index = timers.findIndex((t) => t.id === Number(id))
+
+    if (index !== -1) {
+      timers[index] = {
+        ...timers[index],
+        NombreEvento: name,
+        FechaHora: date,
+        Sound: sound,
+      }
+
+      saveTimersToStorage(timers)
+      loadTimersFromStorage()
+      document.getElementById("edit-modal").style.display = "none"
+      showNotification("Evento actualizado exitosamente", "success")
+    }
+  }
+
+  const editForm = document.getElementById("edit-event-form")
+  if (editForm) {
+    editForm.addEventListener("submit", (e) => {
+      e.preventDefault()
+      saveEditedEvent()
     })
   }
 })
