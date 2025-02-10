@@ -15,7 +15,7 @@
         
         <div class="content">
             <div class="timer-creator">
-                <h2>Crear Nuevo Evento</h2>
+                <h2>Crear Nuevo Temporizador</h2>
                 <form id="create-timer-form" class="timer-form">
                     <div class="form-group">
                         <label for="custom-event-name">Nombre del Evento:</label>
@@ -24,23 +24,6 @@
                     <div class="form-group">
                         <label for="custom-event-date">Fecha y Hora del Evento:</label>
                         <input type="datetime-local" id="custom-event-date" name="FechaHora" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="custom-event-category">Categoría:</label>
-                        <select id="custom-event-category" name="Category" required>
-                            <option value="personal">Personal</option>
-                            <option value="trabajo">Trabajo</option>
-                            <option value="estudio">Estudio</option>
-                            <option value="otro">Otro</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="custom-event-priority">Prioridad:</label>
-                        <select id="custom-event-priority" name="Priority" required>
-                            <option value="baja">Baja</option>
-                            <option value="media">Media</option>
-                            <option value="alta">Alta</option>
-                        </select>
                     </div>
                     <div class="form-group">
                         <label for="custom-event-sound">Sonido de Alarma:</label>
@@ -63,11 +46,7 @@
         </a>
         <a href="temporizadores.html" class="nav-item" data-section="temporizadores">
             <i class="fas fa-clock"></i>
-            <span>Ver Eventos</span>
-        </a>
-        <a href="tareas.html" class="nav-item" data-section="tareas">
-            <i class="fas fa-tasks"></i>
-            <span>Tareas</span>
+            <span>Ver Temporizadores</span>
         </a>
     </nav>
 
