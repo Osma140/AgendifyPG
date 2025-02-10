@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Temporizadores</title>
+    <title>Eventos</title>
     <link rel="icon" href="icon/icon.ico" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -11,11 +11,32 @@
 </head>
 <body>
     <div class="container">
-        <h1 class="main-title"><i class="fas fa-clock"></i> Temporizadores</h1>
+        <h1 class="main-title"><i class="fas fa-clock"></i> Eventos</h1>
         
         <div class="content">
+            <div class="filter-sort">
+                <select id="category-filter">
+                    <option value="all">Todas las categorías</option>
+                    <option value="personal">Personal</option>
+                    <option value="trabajo">Trabajo</option>
+                    <option value="estudio">Estudio</option>
+                    <option value="otro">Otro</option>
+                </select>
+                <select id="priority-filter">
+                    <option value="all">Todas las prioridades</option>
+                    <option value="baja">Baja</option>
+                    <option value="media">Media</option>
+                    <option value="alta">Alta</option>
+                </select>
+                <select id="sort-events">
+                    <option value="date-asc">Fecha (ascendente)</option>
+                    <option value="date-desc">Fecha (descendente)</option>
+                    <option value="priority-asc">Prioridad (ascendente)</option>
+                    <option value="priority-desc">Prioridad (descendente)</option>
+                </select>
+            </div>
             <div id="timers-grid" class="timers-grid">
-                <!-- Los temporizadores se cargarán aquí dinámicamente -->
+                <!-- Los eventos se cargarán aquí dinámicamente -->
             </div>
         </div>
     </div>
@@ -27,7 +48,11 @@
         </a>
         <a href="temporizadores.html" class="nav-item active" data-section="temporizadores">
             <i class="fas fa-clock"></i>
-            <span>Ver Temporizadores</span>
+            <span>Ver Eventos</span>
+        </a>
+        <a href="tareas.html" class="nav-item" data-section="tareas">
+            <i class="fas fa-tasks"></i>
+            <span>Tareas</span>
         </a>
     </nav>
 
@@ -39,4 +64,3 @@
     <script src="script.js"></script>
 </body>
 </html>
-
