@@ -1,19 +1,21 @@
 :root {
-  --primary-color: #6366f1;
-  --secondary-color: #8b5cf6;
-  --accent-color: #ec4899;
+  --primary-color: #3b82f6;
+  --secondary-color: #60a5fa;
+  --accent-color: #f472b6;
   --background-color: #f3f4f6;
   --text-color: #1f2937;
   --card-background: #ffffff;
+  --success-color: #10b981;
+  --error-color: #ef4444;
 }
 
 .dark-mode {
-  --primary-color: #818cf8;
-  --secondary-color: #a78bfa;
+  --primary-color: #60a5fa;
+  --secondary-color: #93c5fd;
   --accent-color: #f472b6;
-  --background-color: #1f2937;
-  --text-color: #f3f4f6;
-  --card-background: #374151;
+  --background-color: #111827;
+  --text-color: #f9fafb;
+  --card-background: #1f2937;
 }
 
 * {
@@ -44,6 +46,7 @@ body {
   font-size: 2.5rem;
   margin-bottom: 40px;
   color: var(--primary-color);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .content {
@@ -58,9 +61,16 @@ body {
   width: 100%;
   max-width: 600px;
   background-color: var(--card-background);
-  border-radius: 10px;
-  padding: 20px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
+  padding: 30px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.timer-creator:hover,
+.task-creator:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
 .timer-form,
@@ -73,51 +83,67 @@ body {
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 8px;
 }
 
 .form-group label {
   font-weight: 600;
+  color: var(--primary-color);
 }
 
 .form-group input,
 .form-group select {
   width: 100%;
-  padding: 10px;
-  border: 1px solid var(--secondary-color);
-  border-radius: 5px;
+  padding: 12px;
+  border: 2px solid var(--secondary-color);
+  border-radius: 8px;
   background-color: var(--background-color);
   color: var(--text-color);
+  font-size: 1rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5);
 }
 
 button[type="submit"] {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
   border: none;
-  border-radius: 5px;
+  border-radius: 8px;
   background-color: var(--accent-color);
   color: #ffffff;
   font-weight: 600;
+  font-size: 1rem;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.1s ease;
 }
 
 button[type="submit"]:hover {
-  background-color: #d946ef;
+  background-color: #e11d8f;
+  transform: translateY(-2px);
+}
+
+button[type="submit"]:active {
+  transform: translateY(0);
 }
 
 .timers-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 30px;
   width: 100%;
 }
 
 .timer-card {
   background-color: var(--card-background);
-  border-radius: 10px;
-  padding: 20px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
+  padding: 25px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   display: flex;
   flex-direction: column;
@@ -125,19 +151,22 @@ button[type="submit"]:hover {
 
 .timer-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
 .timer-card h3 {
-  margin-bottom: 10px;
-  font-size: 1.2rem;
+  margin-bottom: 15px;
+  font-size: 1.4rem;
   color: var(--primary-color);
 }
 
 .timer-display {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
+  background-color: var(--background-color);
+  border-radius: 10px;
+  padding: 15px;
 }
 
 .timer-unit {
@@ -145,31 +174,44 @@ button[type="submit"]:hover {
 }
 
 .timer-unit span {
-  font-size: 1.5rem;
+  font-size: 1.8rem;
   font-weight: 600;
+  color: var(--accent-color);
 }
 
 .timer-unit small {
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   text-transform: uppercase;
+  color: var(--text-color);
 }
 
 .timer-actions {
   display: flex;
   justify-content: space-between;
+  gap: 10px;
 }
 
-.delete-button,
-.sound-button {
-  padding: 5px 10px;
+.timer-actions button {
+  flex: 1;
+  padding: 10px;
   border: none;
-  border-radius: 5px;
+  border-radius: 8px;
+  font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, transform 0.1s ease;
+}
+
+.edit-button {
+  background-color: var(--secondary-color);
+  color: #ffffff;
+}
+
+.edit-button:hover {
+  background-color: #3b82f6;
 }
 
 .delete-button {
-  background-color: #ef4444;
+  background-color: var(--error-color);
   color: #ffffff;
 }
 
@@ -178,12 +220,16 @@ button[type="submit"]:hover {
 }
 
 .sound-button {
-  background-color: var(--secondary-color);
+  background-color: var(--success-color);
   color: #ffffff;
 }
 
 .sound-button:hover {
-  background-color: #7c3aed;
+  background-color: #059669;
+}
+
+.timer-actions button:active {
+  transform: translateY(2px);
 }
 
 .bottom-nav {
@@ -194,8 +240,8 @@ button[type="submit"]:hover {
   background-color: var(--card-background);
   display: flex;
   justify-content: space-around;
-  padding: 10px 0;
-  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+  padding: 15px 0;
+  box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1), 0 -2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 .nav-item {
@@ -204,11 +250,11 @@ button[type="submit"]:hover {
   display: flex;
   flex-direction: column;
   align-items: center;
-  transition: color 0.3s ease;
+  transition: color 0.3s ease, transform 0.3s ease;
 }
 
 .nav-item i {
-  font-size: 20px;
+  font-size: 24px;
   margin-bottom: 5px;
 }
 
@@ -219,6 +265,7 @@ button[type="submit"]:hover {
 .nav-item:hover,
 .nav-item.active {
   color: var(--accent-color);
+  transform: translateY(-3px);
 }
 
 .theme-toggle,
@@ -227,14 +274,14 @@ button[type="submit"]:hover {
   background-color: var(--card-background);
   border: none;
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
   display: flex;
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.3s;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  transition: background-color 0.3s, transform 0.3s;
 }
 
 .theme-toggle {
@@ -243,13 +290,18 @@ button[type="submit"]:hover {
 }
 
 .download-toggle {
-  top: 70px;
+  top: 80px;
   right: 20px;
+}
+
+.theme-toggle:hover,
+.download-toggle:hover {
+  transform: scale(1.1);
 }
 
 .theme-toggle i,
 .download-toggle i {
-  font-size: 20px;
+  font-size: 24px;
   color: var(--text-color);
 }
 
@@ -268,7 +320,7 @@ button[type="submit"]:hover {
 .tasks-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 15px;
   width: 100%;
   max-width: 600px;
 }
@@ -278,30 +330,39 @@ button[type="submit"]:hover {
   justify-content: space-between;
   align-items: center;
   background-color: var(--card-background);
-  padding: 10px;
-  border-radius: 5px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.task-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
 .task-item .task-name {
   flex-grow: 1;
+  font-size: 1.1rem;
 }
 
 .task-item .task-actions {
   display: flex;
-  gap: 5px;
+  gap: 10px;
 }
 
 .task-item .task-actions button {
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 1.2rem;
   color: var(--text-color);
+  transition: color 0.3s ease, transform 0.3s ease;
 }
 
 .task-item .task-actions button:hover {
   color: var(--accent-color);
+  transform: scale(1.1);
 }
 
 @media (max-width: 768px) {
@@ -316,36 +377,17 @@ button[type="submit"]:hover {
   .timers-grid {
     grid-template-columns: 1fr;
   }
-}
 
-.download-section {
-  margin-top: 40px;
-  text-align: center;
-}
+  .theme-toggle,
+  .download-toggle {
+    width: 40px;
+    height: 40px;
+  }
 
-.download-section h2 {
-  color: var(--primary-color);
-  margin-bottom: 10px;
-}
-
-.download-section p {
-  color: var(--text-color);
-  margin-bottom: 20px;
-}
-
-.download-button {
-  background-color: var(--accent-color);
-  color: #ffffff;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.download-button:hover {
-  background-color: #d946ef;
+  .theme-toggle i,
+  .download-toggle i {
+    font-size: 20px;
+  }
 }
 
 .modal {
@@ -357,17 +399,30 @@ button[type="submit"]:hover {
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgba(0,0,0,0.4);
+  animation: fadeIn 0.3s;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .modal-content {
   background-color: var(--card-background);
-  margin: 15% auto;
-  padding: 20px;
+  margin: 10% auto;
+  padding: 30px;
   border: 1px solid var(--secondary-color);
-  border-radius: 10px;
-  width: 80%;
+  border-radius: 15px;
+  width: 90%;
   max-width: 500px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  animation: slideIn 0.3s;
+}
+
+@keyframes slideIn {
+  from { transform: translateY(-50px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
 }
 
 .close {
@@ -375,6 +430,7 @@ button[type="submit"]:hover {
   float: right;
   font-size: 28px;
   font-weight: bold;
+  transition: color 0.3s;
 }
 
 .close:hover,
@@ -382,4 +438,30 @@ button[type="submit"]:hover {
   color: var(--accent-color);
   text-decoration: none;
   cursor: pointer;
+}
+
+.notification {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 15px 20px;
+  border-radius: 8px;
+  color: #ffffff;
+  font-weight: 600;
+  opacity: 0;
+  transition: opacity 0.3s, transform 0.3s;
+  z-index: 1000;
+}
+
+.notification.success {
+  background-color: var(--success-color);
+}
+
+.notification.error {
+  background-color: var(--error-color);
+}
+
+.notification.show {
+  opacity: 1;
+  transform: translateY(0);
 }
