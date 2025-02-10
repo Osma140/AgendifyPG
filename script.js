@@ -23,8 +23,6 @@ document.addEventListener("DOMContentLoaded", () => {
     timerCard.setAttribute("data-id", timer.id)
     timerCard.setAttribute("data-end-time", new Date(timer.FechaHora).getTime())
     timerCard.setAttribute("data-sound", timer.Sound)
-    timerCard.setAttribute("data-category", timer.Category)
-    timerCard.setAttribute("data-priority", timer.Priority)
 
     const now = new Date().getTime()
     const endTime = new Date(timer.FechaHora).getTime()
@@ -51,10 +49,6 @@ document.addEventListener("DOMContentLoaded", () => {
           <span class="seconds">00</span>
           <small>Segundos</small>
         </div>
-      </div>
-      <div class="event-details">
-        <span class="category">${timer.Category}</span>
-        <span class="priority">${timer.Priority}</span>
       </div>
       <div class="timer-actions">
         <button class="delete-button" data-id="${timer.id}"><i class="fas fa-trash"></i> Eliminar</button>
@@ -155,54 +149,6 @@ document.addEventListener("DOMContentLoaded", () => {
       })
   }
 
-  function filterAndSortEvents() {
-    const categoryFilter = document.getElementById("category-filter").value
-    const priorityFilter = document.getElementById("priority-filter").value
-    const sortOption = document.getElementById("sort-events").value
-
-    let timers = JSON.parse(localStorage.getItem("timers")) || []
-
-    // Aplicar filtros
-    timers = timers.filter(
-      (timer) =>
-        (categoryFilter === "all" || timer.Category === categoryFilter) &&
-        (priorityFilter === "all" || timer.Priority === priorityFilter),
-    )
-
-    // Aplicar ordenamiento
-    timers.sort((a, b) => {
-      switch (sortOption) {
-        case "date-asc":
-          return new Date(a.FechaHora) - new Date(b.FechaHora)
-        case "date-desc":
-          return new Date(b.FechaHora) - new Date(a.FechaHora)
-        case "priority-asc":
-          return getPriorityValue(a.Priority) - getPriorityValue(b.Priority)
-        case "priority-desc":
-          return getPriorityValue(b.Priority) - getPriorityValue(a.Priority)
-        default:
-          return 0
-      }
-    })
-
-    // Limpiar y volver a cargar los eventos
-    timersContainer.innerHTML = ""
-    timers.forEach((timer) => createTimerCard(timer))
-  }
-
-  function getPriorityValue(priority) {
-    switch (priority) {
-      case "baja":
-        return 1
-      case "media":
-        return 2
-      case "alta":
-        return 3
-      default:
-        return 0
-    }
-  }
-
   if (form) {
     form.addEventListener("submit", (e) => {
       e.preventDefault()
@@ -211,8 +157,6 @@ document.addEventListener("DOMContentLoaded", () => {
         id: Date.now(),
         NombreEvento: formData.get("Name"),
         FechaHora: formData.get("FechaHora"),
-        Category: formData.get("Category"),
-        Priority: formData.get("Priority"),
         Sound: formData.get("Sound"),
       }
 
@@ -232,7 +176,6 @@ document.addEventListener("DOMContentLoaded", () => {
       const newTask = {
         id: Date.now(),
         name: formData.get("TaskName"),
-        priority: formData.get("TaskPriority"),
         completed: false,
       }
 
@@ -262,7 +205,6 @@ document.addEventListener("DOMContentLoaded", () => {
     taskItem.classList.add("task-item")
     taskItem.innerHTML = `
       <span class="task-name">${task.name}</span>
-      <span class="task-priority">${task.priority}</span>
       <div class="task-actions">
         <button class="complete-task" data-id="${task.id}"><i class="fas ${task.completed ? "fa-check-circle" : "fa-circle"}"></i></button>
         <button class="delete-task" data-id="${task.id}"><i class="fas fa-trash"></i></button>
@@ -300,11 +242,6 @@ document.addEventListener("DOMContentLoaded", () => {
     setInterval(() => {
       document.querySelectorAll(".timer-card").forEach(updateTimer)
     }, 1000)
-
-    // Agregar event listeners para filtros y ordenamiento
-    document.getElementById("category-filter").addEventListener("change", filterAndSortEvents)
-    document.getElementById("priority-filter").addEventListener("change", filterAndSortEvents)
-    document.getElementById("sort-events").addEventListener("change", filterAndSortEvents)
   }
 
   // Theme toggle functionality
