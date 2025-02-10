@@ -184,28 +184,6 @@ button[type="submit"]:hover {
   background-color: #7c3aed;
 }
 
-.timer-card .event-details {
-  margin-top: 10px;
-}
-
-.timer-card .event-details span {
-  display: inline-block;
-  margin-right: 10px;
-  padding: 2px 5px;
-  border-radius: 3px;
-  font-size: 0.8rem;
-}
-
-.timer-card .event-details .category {
-  background-color: var(--primary-color);
-  color: #ffffff;
-}
-
-.timer-card .event-details .priority {
-  background-color: var(--accent-color);
-  color: #ffffff;
-}
-
 .bottom-nav {
   position: fixed;
   bottom: 0;
@@ -285,20 +263,6 @@ button[type="submit"]:hover {
   display: none;
 }
 
-.filter-sort {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 20px;
-}
-
-.filter-sort select {
-  padding: 5px 10px;
-  border-radius: 5px;
-  border: 1px solid var(--secondary-color);
-  background-color: var(--background-color);
-  color: var(--text-color);
-}
-
 .tasks-list {
   display: flex;
   flex-direction: column;
@@ -319,14 +283,6 @@ button[type="submit"]:hover {
 
 .task-item .task-name {
   flex-grow: 1;
-}
-
-.task-item .task-priority {
-  padding: 2px 5px;
-  border-radius: 3px;
-  font-size: 0.8rem;
-  background-color: var(--accent-color);
-  color: #ffffff;
 }
 
 .task-item .task-actions {
